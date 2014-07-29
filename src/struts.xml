@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN"
+        "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<!-- 指定默认的父包 -->
+	<constant name="struts.convention.default.parent.package" value="crud-default" />
+	<constant name="struts.multipart.maxSize" value="102400000000000" />
+	<!-- 默认会到/WEB-INF/content文件夹下面查找对应的结果页面  这里就使用默认吧   不改变路径了
+	<constant name="struts.convention.result.path" value="/WEB-INF/jsp" /> -->
+	<!-- 设置convention插件默认的根包    默认扫描struts、struts2、action、actions这些包  现在改成扫描 web -->
+	<constant name="struts.convention.package.locators" value="web" />
+	<!-- 搜索此配置下的所有包 -->
+	<constant name="struts.convention.package.locators.basePackage" value="com.bb2004" />
+	<!-- 确保Spring的自动装配策略总是被考虑 -->
+	<constant name="struts.objectFactory.spring.autoWire.alwaysRespect" value="true" />
+	<!-- 继承convention-default包，定义一个默认的拦截器，根据需要还可扩展 -->
+	<!-- 用于CRUD Action的parent package  -->
+	<package name="crud-default" extends="convention-default">
+	 	<interceptors>
+			<!-- 登录验证拦截器 -->
+			<interceptor name="authority" class="com.bb2004.common.AuthorityInterceptor" />
+			<interceptor-stack name="boloStack">
+				<!-- 将登录验证拦截器加入默认的拦截器栈中 -->
+				<interceptor-ref name="authority">
+					<param name="excludeMethods">objectList,login,readExcel,wap**</param>
+				</interceptor-ref>
+				<interceptor-ref name="paramsPrepareParamsStack" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="boloStack" />
+		<global-results>
+			<result name="login">/jump.jsp</result>
+		</global-results>
+	</package>
+</struts>
