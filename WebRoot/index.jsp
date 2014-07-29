@@ -1,1 +1,0 @@
-<% response.sendRedirect("blogs/article!list.action"); %>
